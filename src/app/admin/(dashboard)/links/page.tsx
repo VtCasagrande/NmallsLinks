@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FiPlus, FiEdit2, FiEye, FiEyeOff } from 'react-icons/fi';
-import { ILink } from '@/models/Link';
+import { ILink } from '@/types';
 
 export default function Links() {
   const [links, setLinks] = useState<ILink[]>([]);
@@ -96,7 +96,7 @@ export default function Links() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10 flex items-center justify-center bg-nmalls-secondary rounded-md text-nmalls-primary">
-                            <span dangerouslySetInnerHTML={{ __html: link.icon }} />
+                            {link.icon && <span dangerouslySetInnerHTML={{ __html: link.icon }} />}
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
@@ -117,7 +117,7 @@ export default function Links() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {link.category.charAt(0).toUpperCase() + link.category.slice(1)}
+                          {link.category && (link.category.charAt(0).toUpperCase() + link.category.slice(1))}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
