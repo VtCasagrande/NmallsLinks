@@ -1,82 +1,68 @@
+'use client';
+
+import { useState } from 'react';
+import { FaInstagram, FaFacebook, FaTwitter, FaYoutube, FaTiktok, FaLinkedin, FaLink } from 'react-icons/fa';
 import { ISocialLink } from '@/types';
-import { FaInstagram, FaFacebook, FaWhatsapp, FaEnvelope, FaLinkedin, FaTiktok, FaYoutube } from 'react-icons/fa';
 
 interface SocialLinksProps {
   socialLinks: ISocialLink[];
-  trackClick?: (url: string) => void;
+  trackClick: (id: string, type: 'social') => void;
 }
 
-const SocialLinks = ({ socialLinks, trackClick }: SocialLinksProps) => {
-  const getIconComponent = (platform: string) => {
-    if (!platform) {
-      return <span className="w-full h-full">🔗</span>;
-    }
+export default function SocialLinks({ socialLinks, trackClick }: SocialLinksProps) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getIconComponent = (platform?: string) => {
+    if (!platform) return <FaLink />;
     
-    try {
-      switch (platform.toLowerCase()) {
-        case 'instagram':
-          return <FaInstagram className="w-full h-full" />;
-        case 'facebook':
-          return <FaFacebook className="w-full h-full" />;
-        case 'whatsapp':
-          return <FaWhatsapp className="w-full h-full" />;
-        case 'email':
-          return <FaEnvelope className="w-full h-full" />;
-        case 'linkedin':
-          return <FaLinkedin className="w-full h-full" />;
-        case 'tiktok':
-          return <FaTiktok className="w-full h-full" />;
-        case 'youtube':
-          return <FaYoutube className="w-full h-full" />;
-        default:
-          return <span dangerouslySetInnerHTML={{ __html: platform }} />;
-      }
-    } catch (error) {
-      console.error('Erro ao processar ícone:', error);
-      return <span className="w-full h-full">🔗</span>;
+    switch (platform.toLowerCase()) {
+      case 'instagram':
+        return <FaInstagram />;
+      case 'facebook':
+        return <FaFacebook />;
+      case 'twitter':
+        return <FaTwitter />;
+      case 'youtube':
+        return <FaYoutube />;
+      case 'tiktok':
+        return <FaTiktok />;
+      case 'linkedin':
+        return <FaLinkedin />;
+      default:
+        return <FaLink />;
     }
   };
 
   const handleClick = async (social: ISocialLink) => {
-    // Se houver uma função de rastreamento externa, use-a
-    if (trackClick) {
-      trackClick(social.url);
-    }
+    if (isLoading) return;
+    setIsLoading(true);
     
     try {
-      // Registrar o clique na API
-      await fetch('/api/track/click', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          linkId: social._id,
-          linkTitle: social.platform,
-        }),
-      });
+      if (social._id) {
+        trackClick(String(social._id), 'social');
+      }
+      
+      // Abrir o link em uma nova aba
+      window.open(social.url, '_blank');
     } catch (error) {
-      console.error('Erro ao registrar clique em link social:', error);
+      console.error('Erro ao registrar clique:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center space-x-4 my-6">
+    <div className="flex justify-center space-x-4 mt-8 mb-4">
       {socialLinks.map((social) => (
-        <a
-          key={social._id.toString()}
-          href={social.url}
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          key={String(social._id)}
           onClick={() => handleClick(social)}
-          className="social-icon"
-          aria-label={social.platform || 'link social'}
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-nmalls-primary text-white hover:bg-nmalls-secondary transition-colors"
+          aria-label={`Visite nosso ${social.platform || 'link social'}`}
         >
-          {getIconComponent(social.icon || social.platform || '')}
-        </a>
+          {getIconComponent(social.icon || social.platform)}
+        </button>
       ))}
     </div>
   );
-};
-
-export default SocialLinks; 
+} 

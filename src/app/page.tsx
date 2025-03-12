@@ -157,13 +157,13 @@ export default function Home() {
             {featuredLinks.length > 0 && (
               <div className="mb-8">
                 {featuredLinks.map(link => (
-                  <LinkCard key={link._id.toString()} link={link} trackClick={trackClick} />
+                  <LinkCard key={String(link._id)} link={link} trackClick={trackClick} />
                 ))}
               </div>
             )}
             
             {regularLinks.map(link => (
-              <LinkCard key={link._id.toString()} link={link} trackClick={trackClick} />
+              <LinkCard key={String(link._id)} link={link} trackClick={trackClick} />
             ))}
             
             {links.length === 0 && (
