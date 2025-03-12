@@ -21,8 +21,25 @@ RUN npm ci
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Construir a aplicação
-RUN npm run build
+# Receber variáveis de ambiente como argumentos de build
+ARG MONGODB_URI
+ARG NEXTAUTH_SECRET
+ARG NEXTAUTH_URL
+ARG ADMIN_USERNAME
+ARG ADMIN_PASSWORD
+
+# Definir variáveis de ambiente a partir dos argumentos
+ENV MONGODB_URI=${MONGODB_URI}
+ENV NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+ENV NEXTAUTH_URL=${NEXTAUTH_URL}
+ENV ADMIN_USERNAME=${ADMIN_USERNAME}
+ENV ADMIN_PASSWORD=${ADMIN_PASSWORD}
+
+# Mostrar variáveis de ambiente (sem valores sensíveis)
+RUN echo "Variáveis de ambiente configuradas: MONGODB_URI, NEXTAUTH_SECRET, NEXTAUTH_URL, ADMIN_USERNAME, ADMIN_PASSWORD"
+
+# Tentar construir a aplicação com mais informações de debug
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build || (echo "ERRO NO BUILD" && ls -la && exit 1)
 
 # Expor porta
 EXPOSE 3000

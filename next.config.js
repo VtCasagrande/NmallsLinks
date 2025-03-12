@@ -1,17 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
-    domains: ['localhost'],
     unoptimized: true,
+    domains: ['localhost'],
   },
   output: 'standalone',
   poweredByHeader: false,
-  swcMinify: true,
-  experimental: {
-    // Desativar recursos experimentais que podem causar problemas
-    serverComponentsExternalPackages: [],
-  },
+  swcMinify: false,
 }
 
 module.exports = nextConfig 
