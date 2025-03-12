@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 255, 235, 217;
+  --background-end-rgb: 255, 245, 235;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+}
+
+@layer components {
+  .link-card {
+    @apply w-full bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg;
+  }
+  
+  .social-icon {
+    @apply w-8 h-8 text-gray-600 hover:text-nmalls-primary transition-colors duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-nmalls-primary text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-all duration-300;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-nmalls-primary border border-nmalls-primary px-4 py-2 rounded-lg hover:bg-nmalls-secondary transition-all duration-300;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-nmalls-primary;
+  }
+} 
